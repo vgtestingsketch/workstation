@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <!-- List View -->
+    <record id="view_operator_task_list" model="ir.ui.view">
+        <field name="name">operator.task.list</field>
+        <field name="model">operator.task</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="order_number" string="Номер заказа"/>
+                <field name="order_name" string="Название заказа"/>
+                <field name="state" string="Статус"/>
+                <field name="operator_id" string="Оператор"/>
+                
+                <!-- Кнопки -->
+                <button name="action_start_work" 
+                        string="Взять в работу" 
+                        type="object" 
+                        class="btn-primary"
+                        invisible="state != 'ready'"/>
+                
+                <button name="action_complete" 
+                        string="ГОТОВО" 
+                        type="object" 
+                        class="btn-success"
+                        invisible="state != 'in_progress'"/>
+                
+                <button name="action_reject" 
+                        string="БРАК" 
+                        type="object" 
+                        class="btn-danger"
+                        invisible="state != 'in_progress'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_operator_task_form" model="ir.ui.view">
+        <field name="name">operator.task.form</field>
+        <field name="model">operator.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="order_number" string="Номер заказа"/>
+                            <field name="order_name" string="Название заказа"/>
+                        </group>
+                        <group>
+                            <field name="state" string="Статус"/>
+                            <field name="start_time" string="Принят"/>
+                            <field name="end_time" string="Завершен"/>
+                            <field name="operator_id" string="Оператор"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="details" string="Подробности"/>
+                    </group>
+                </sheet>
+                
+                <footer>
+                    <button name="action_start_work" 
+                            string="Взять в работу" 
+                            type="object" 
+                            class="btn-primary"
+                            invisible="state != 'ready'"/>
+                    
+                    <button name="action_complete" 
+                            string="ГОТОВО" 
+                            type="object" 
+                            class="btn-success"
+                            invisible="state != 'in_progress'"/>
+                    
+                    <button name="action_reject" 
+                            string="БРАК" 
+                            type="object" 
+                            class="btn-danger"
+                            invisible="state != 'in_progress'"/>
+                    
+                    <button string="Закрыть" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action and Menu -->
+    <record id="action_operator_task" model="ir.actions.act_window">
+        <field name="name">Задания оператора</field>
+        <field name="res_model">operator.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_ready': 1}</field>
+        <field name="view_id" ref="view_operator_task_list"/>
+    </record>
+
+    <menuitem id="menu_operator_task_root" name="АРМ Оператора"/>
+    <menuitem id="menu_operator_task" name="Задания" parent="menu_operator_task_root" action="action_operator_task"/>
+</odoo>
